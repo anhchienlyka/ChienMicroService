@@ -1,5 +1,6 @@
 using Common.Logging;
 using Product.API.Extensions;
+using Product.API.Persistence;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()

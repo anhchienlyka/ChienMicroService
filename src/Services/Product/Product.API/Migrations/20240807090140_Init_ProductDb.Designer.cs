@@ -11,7 +11,7 @@ using Product.API.Persistence;
 namespace Product.API.Migrations
 {
     [DbContext(typeof(ProductContext))]
-    [Migration("20240807073241_Init_ProductDb")]
+    [Migration("20240807090140_Init_ProductDb")]
     partial class Init_ProductDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,7 +54,29 @@ namespace Product.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CatalogProducts");
+                    b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
+                            Name = "Esprit",
+                            No = "Latus",
+                            Price = 17789.23m,
+                            Summanry = "Summanry1"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            CreatedDate = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit",
+                            Name = "CTS",
+                            No = "Cadillac",
+                            Price = 2332.23m,
+                            Summanry = "Summanry2"
+                        });
                 });
 #pragma warning restore 612, 618
         }

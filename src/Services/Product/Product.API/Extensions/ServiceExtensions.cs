@@ -1,9 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Contracts.Commons.Interfaces;
+using Infrastructure.Common;
+using Infrastructure.Commons;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using MySqlConnector;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Product.API.Persistence;
+using Product.API.Repositories.Interfaces;
 using Serilog;
 using System.Text.Json;
 
@@ -18,6 +22,7 @@ namespace Product.API.Extensions
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
             services.ConfigureProductDbContext(configuration);
+            services.AddInfrastructureService();
             return services;
         }
 
@@ -38,15 +43,15 @@ namespace Product.API.Extensions
         }
 
 
-        //private static IServiceCollection AddInfrastructureService(this IServiceCollection services)
-        //{
-        //    services.AddScoped(typeof(IRepositoryBaseAsync<,,>), typeof(RepositoryBase<,,>));
-        //    services.AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
-        //    services.AddScoped<IProductRepository, ProductRepository>();
+        private static IServiceCollection AddInfrastructureService(this IServiceCollection services)
+        {
+            services.AddScoped(typeof(IRepositoryBaseAsync<,,>), typeof(RepositoryBaseAsync<,,>));
+            services.AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
+            services.AddScoped<IProductRepository, ProductRepository>();
 
-        //    return services;
+            return services;
 
-        //}
+        }
 
         //private static void ConfigureHealthChecks(this IServiceCollection services)
         //{

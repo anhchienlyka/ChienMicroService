@@ -9,7 +9,7 @@ namespace Product.API.Persistence
         {
         }
 
-        public DbSet<Entities.CatalogProduct>  CatalogProducts { get; set; }
+        public DbSet<Entities.CatalogProduct> Products { get; set; }
 
         public Task<int> SaveChangeAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -39,5 +39,14 @@ namespace Product.API.Persistence
             }
             return base.SaveChangesAsync(cancellationToken);
         }
+
+ 
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
+            modelBuilder.Seed();
+        }
+
     }
 }
