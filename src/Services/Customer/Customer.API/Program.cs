@@ -33,7 +33,11 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "unhandled exception");
+    Log.Information($"Error Customer API :{ex.Message}");
+    string type = ex.GetType().Name;
+    if (type.Equals("StopTheHostException", StringComparison.Ordinal))
+        throw;
+    Log.Fatal(ex, "Unhanded exception");
 }
 finally
 {

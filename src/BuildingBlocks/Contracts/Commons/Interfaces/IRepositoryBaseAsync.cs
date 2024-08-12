@@ -38,6 +38,8 @@ namespace Contracts.Commons.Interfaces
 
         IList<K> CreateList(IEnumerable<T> entities);
 
+        Task<bool>IsExist(K id);
+
         Task<IList<K>> CreateListAsync(IEnumerable<T> entities);
 
         void Update(T entity);

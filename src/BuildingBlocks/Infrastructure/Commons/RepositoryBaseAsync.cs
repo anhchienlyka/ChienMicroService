@@ -141,7 +141,10 @@ public class RepositoryBaseAsync<T, K, TContext> : RepositoryQueryBaseAsync<T, K
         return await _context.Set<T>().Where(where).ToListAsync();
     }
 
-   
+    public async Task<bool> IsExist(K id)
+    {
+        return await _context.Set<T>().AnyAsync(x => x.Id.Equals(id));
+    }
 }
 
 public class RepositoryQueryBaseAsync<T, K, TContext> : IRepositoryQueryBase<T, K, TContext>
