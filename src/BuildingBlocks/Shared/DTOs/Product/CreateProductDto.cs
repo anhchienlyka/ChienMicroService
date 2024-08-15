@@ -6,5 +6,7 @@ namespace Shared.DTOs.Product
     {
         [Required]
         public string No { get; set; }
+        [Required]
+        public string Summanry { get; set; } 
     }
 }

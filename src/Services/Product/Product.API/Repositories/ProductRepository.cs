@@ -1,5 +1,5 @@
 ﻿using Contracts.Commons.Interfaces;
-using Infrastructure.Common;
+using Infrastructure.Commons;
 using Product.API.Entities;
 using Product.API.Persistence;
 using Product.API.Repositories.Interfaces;

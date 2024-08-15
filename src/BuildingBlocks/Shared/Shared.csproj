@@ -8,6 +8,13 @@
 
   <ItemGroup>
     <Folder Include="Configurations\" />
+    <Folder Include="DTOs\ScheduledJob\" />
+    <Folder Include="DTOs\Order\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.32" />
+    <PackageReference Include="MongoDB.Driver" Version="2.28.0" />
   </ItemGroup>
 
 </Project>

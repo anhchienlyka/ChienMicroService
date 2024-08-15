@@ -50,7 +50,9 @@ namespace Product.API.Controllers
             var product = _mapper.Map<CatalogProduct>(createProduct);
 
             var result = await _productRepository.CreateAsync(product);
-            await _unitOfWork.SaveChangeAsync();
+
+            await _productRepository.SaveChangesAsync();
+
             return Ok(result);
         }
 

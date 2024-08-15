@@ -1,5 +1,4 @@
 ﻿using Contracts.Commons.Interfaces;
-using Infrastructure.Common;
 using Infrastructure.Commons;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;

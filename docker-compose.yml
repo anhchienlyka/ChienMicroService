@@ -24,8 +24,8 @@ services:
   rabbitmq:
     image: rabbitmq:3-management-alpine
 
-  #pgadmin:
-  #  image: dpage/pgadmin4
+  pgadmin:
+   image: dpage/pgadmin4
 
   portainer:
     image: portainer/portainer-ce
@@ -41,13 +41,13 @@ services:
     image: ${DOCKER_REGISTRY-}product-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: Services/Product.API/Dockerfile
+      dockerfile: src/Services/Product/Product.API/Dockerfile
       
-  #customer.api:
-  #  image: ${DOCKER_REGISTRY-}customer-api:${PLATFORM:-linux}-${TAG:-latest}
-  #  build:
-  #    context: .
-  #    dockerfile: Services/Customer.API/Dockerfile
+  customer.api:
+   image: ${DOCKER_REGISTRY-}customer-api:${PLATFORM:-linux}-${TAG:-latest}
+   build:
+     context: .
+     dockerfile: src/Services/Customer/Customer.API/Dockerfile
       
   #basket.api:
   #  image: ${DOCKER_REGISTRY-}basket-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -106,8 +106,8 @@ volumes:
   mysql_data:
     name: mysql_data
 
-  #postgres_data:
-  #  name: postgres_data
+  postgres_data:
+   name: postgres_data
 
   portainer_data:
     name: portainer_data
@@ -124,5 +124,5 @@ volumes:
   #hangfire_mongo_data:
   #  name: hangfire_mongo_data
 
-  #pgadmin_data:
-  #  name: pgadmin_data
+  pgadmin_data:
+   name: pgadmin_data

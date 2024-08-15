@@ -1,5 +1,8 @@
 ﻿using Contracts.Commons.Interfaces;
+using Contracts.Domains;
+using Contracts.Domains.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Infrastructure.Commons
 {
