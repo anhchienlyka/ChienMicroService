@@ -3,10 +3,10 @@ using System.Reflection;
 
 namespace Infrastructure.Mappings
 {
-    public static class AutoMapperExtension
+    public static class AutoMapperExtensions
     {
         public static IMappingExpression<TSource, TDestination> IgnoreAllNonExisting<TSource, TDestination>
-        (this IMappingExpression<TSource, TDestination> expression)
+         (this IMappingExpression<TSource, TDestination> expression)
         {
             var flags = BindingFlags.Public | BindingFlags.Instance;
             var sourceType = typeof(TSource);

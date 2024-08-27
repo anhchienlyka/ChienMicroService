@@ -41,11 +41,11 @@ services:
         - postgres_data:/var/lib/postgresql/data
    
    #basketdb: redis
-   #basketdb: 
-   #   container_name: basketdb
-   #   restart: always
-   #   ports:
-   #      - "6379:6379"
+   basketdb: 
+     container_name: basketdb
+     restart: always
+     ports:
+        - "6379:6379"
    
    #inventorydb: mongo
    #inventorydb: 
@@ -147,36 +147,36 @@ services:
         - "6003:80"
      restart: always
       
-   #basket.api:
-   #   container_name: basket.api
-   #   environment:
-   #      - ASPNETCORE_ENVIRONMENT=Development
-   #      - ASPNETCORE_URLS=http://+:80
-   #      - "CacheSettings:ConnectionStrings=basketdb:6379"
-   #      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
-   #      - "GrpcSettings:StockUrl=http://inventory.grpc"
-   #      - BackgroundJobSettings:HangfireUrl=http://hangfire.api
-   #      - BackgroundJobSettings:CheckoutUrl=http://localhost:6001
-   #   depends_on:
-   #      - basketdb
-   #      - rabbitmq
-   #   ports:
-   #      - "6004:80"
-   #   restart: always
+   basket.api:
+     container_name: basket.api
+     environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - ASPNETCORE_URLS=http://+:80
+        - "CacheSettings:ConnectionStrings=basketdb:6379"
+        - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+        - "GrpcSettings:StockUrl=http://inventory.grpc"
+        - BackgroundJobSettings:HangfireUrl=http://hangfire.api
+        - BackgroundJobSettings:CheckoutUrl=http://localhost:6001
+     depends_on:
+        - basketdb
+        - rabbitmq
+     ports:
+        - "6004:80"
+     restart: always
 
-   # ordering.api:
-   #   container_name: ordering.api
-   #   environment:
-   #      - ASPNETCORE_ENVIRONMENT=Development
-   #      - ASPNETCORE_URLS=http://+:80
-   #      - "ConnectionStrings:DefaultConnectionString=Server=orderdb;Database=OrderDb;User=sa;Password=Passw0rd!;MultipleActiveResultSets=True"
-   #      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
-   #   depends_on:
-   #      - orderdb
-   #      - rabbitmq
-   #   ports:
-   #      - "6005:80"
-   #   restart: always
+   ordering.api:
+     container_name: ordering.api
+     environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - ASPNETCORE_URLS=http://+:80
+        - "ConnectionStrings:DefaultConnectionString=Server=orderdb;Database=OrderDb;User=sa;Password=Passw0rd!;MultipleActiveResultSets=True"
+        - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+     depends_on:
+        - orderdb
+        - rabbitmq
+     ports:
+        - "6005:80"
+     restart: always
 
    #inventory.api:
    #   container_name: inventory.api

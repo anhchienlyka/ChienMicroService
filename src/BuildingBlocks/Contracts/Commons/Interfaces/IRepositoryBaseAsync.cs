@@ -1,12 +1,10 @@
 ﻿using Contracts.Domains;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using System;
 using System.Linq.Expressions;
 
 namespace Contracts.Commons.Interfaces
 {
-
     public interface IRepositoryBaseAsync<T, K> : IRepositoryQueryBase<T, K>
         where T : EntityBase<K>
     {
@@ -22,7 +20,7 @@ namespace Contracts.Commons.Interfaces
 
         IList<K> CreateList(IEnumerable<T> entities);
 
-        Task<bool>IsExist(K id);
+        Task<bool> IsExist(K id);
 
         Task<IList<K>> CreateListAsync(IEnumerable<T> entities);
 
@@ -61,7 +59,4 @@ namespace Contracts.Commons.Interfaces
         where TContext : DbContext
     {
     }
-
-
-   
 }

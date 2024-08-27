@@ -1,25 +1,35 @@
 ﻿using Contracts.Commons.Interfaces;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using System.Text.Json.Serialization;
 
 namespace Infrastructure.Commons;
 
 public class SerializeService : ISerializeService
 {
-    public T Deserialize<T>(string text)
-    {
-        throw new NotImplementedException();
-    }
-
     public string Serialize<T>(T obj)
     {
-        throw new NotImplementedException();
+        return JsonConvert.SerializeObject(obj, new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            NullValueHandling = NullValueHandling.Ignore,
+            Converters = new List<JsonConverter>()
+            {
+                new StringEnumConverter()
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                }
+            }
+        });
     }
 
     public string Serialize<T>(T obj, Type type)
     {
-        throw new NotImplementedException();
+        return JsonConvert.SerializeObject(obj, type, new JsonSerializerSettings());
+    }
+
+    public T Deserialize<T>(string text)
+    {
+        return JsonConvert.DeserializeObject<T>(text);
     }
 }

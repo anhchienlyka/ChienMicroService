@@ -11,8 +11,8 @@ services:
   #customerdb:
   #  image: postgres:alpine3.16
   
-  #basketdb:
-  #  image: redis:alpine
+  basketdb:
+   image: redis:alpine
 
   #inventorydb:
   #  image: mongo
@@ -49,17 +49,17 @@ services:
      context: .
      dockerfile: src/Services/Customer/Customer.API/Dockerfile
       
-  #basket.api:
-  #  image: ${DOCKER_REGISTRY-}basket-api:${PLATFORM:-linux}-${TAG:-latest}
-  #  build:
-  #    context: .
-  #    dockerfile: Services/Basket.API/Dockerfile
+  basket.api:
+   image: ${DOCKER_REGISTRY-}basket-api:${PLATFORM:-linux}-${TAG:-latest}
+   build:
+     context: .
+     dockerfile: src/Services/Basket/Basket.API/Dockerfile
 
-  # ordering.api:
-  #  image: ${DOCKER_REGISTRY-}ordering-api:${PLATFORM:-linux}-${TAG:-latest}
-  #  build:
-  #    context: .
-  #    dockerfile: Services/Ordering/Ordering.API/Dockerfile
+  ordering.api:
+   image: ${DOCKER_REGISTRY-}ordering-api:${PLATFORM:-linux}-${TAG:-latest}
+   build:
+     context: .
+     dockerfile: src/Services/Ordering/Ordering.API/Dockerfile
 
   #inventory.api:
   #  image: ${DOCKER_REGISTRY-}inventory-api:${PLATFORM:-linux}-${TAG:-latest}
