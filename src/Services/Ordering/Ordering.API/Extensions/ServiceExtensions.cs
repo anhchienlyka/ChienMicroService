@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Shared.Configurations;
 using Infrastructure.Extensions;
+using MassTransit;
+using Ordering.API.Application.IntegrationEvents.EventsHandler;
 namespace Ordering.API.Extensions
 {
     public static class ServiceExtensions
@@ -19,33 +21,33 @@ namespace Ordering.API.Extensions
             return services;
         }
 
-        //public static void ConfigureMassTransit(this IServiceCollection services)
-        //{
-        //    var settings = services.GetOptions<EventBusSettings>("EventBusSettings");
-        //    if (string.IsNullOrEmpty(settings.HostAddress))
-        //    {
-        //        throw new ArgumentNullException("EventBusSettings is not configured.");
-        //    }
+        public static void ConfigureMassTransit(this IServiceCollection services)
+        {
+            var settings = services.GetOptions<EventBusSettings>("EventBusSettings");
+            if (string.IsNullOrEmpty(settings.HostAddress))
+            {
+                throw new ArgumentNullException("EventBusSettings is not configured.");
+            }
 
-        //    var mqConnection = new Uri(settings.HostAddress);
-        //    services.TryAddSingleton(KebabCaseEndpointNameFormatter.Instance);
-        //    services.AddMassTransit(config =>
-        //    {
-        //        //add consume
-        //        config.AddConsumersFromNamespaceContaining<BasketCheckoutEventHandler>();
-        //        config.UsingRabbitMq((ctx, cfg) =>
-        //        {
-        //            cfg.Host(mqConnection);
-        //            //cfg.ReceiveEndpoint("basket-checkout-queue", c =>
-        //            //{
-        //            //    c.ConfigureConsumer<BasketCheckoutEventHandler>(ctx);
-        //            //});
+            var mqConnection = new Uri(settings.HostAddress);
+            services.TryAddSingleton(KebabCaseEndpointNameFormatter.Instance);
+            services.AddMassTransit(config =>
+            {
+                //add consume
+                config.AddConsumersFromNamespaceContaining<BasketCheckoutEventHandler>();
+                config.UsingRabbitMq((ctx, cfg) =>
+                {
+                    cfg.Host(mqConnection);
+                    cfg.ReceiveEndpoint("basket-checkout-queue", c =>
+                    {
+                        c.ConfigureConsumer<BasketCheckoutEventHandler>(ctx);
+                    });
 
-        //            //co the viet theo receive nhu tren, hoac viet nhu sau de bat ki thang nao co trien khai IConsumer se deu trien khai
-        //            cfg.ConfigureEndpoints(ctx);
-        //        });
-        //    });
-        //}
+                    //co the viet theo receive nhu tren, hoac viet nhu sau de bat ki thang nao co trien khai IConsumer se deu trien khai
+                    //  cfg.ConfigureEndpoints(ctx);
+                });
+            });
+        }
 
         public static void ConfigureHealthChecks(this IServiceCollection services, IConfiguration configuration)
         {

@@ -27,7 +27,7 @@ try
     builder.Services.AddScoped<ISerializeService, SerializeService>();
     builder.Services.AddSingleton<Stopwatch>(new Stopwatch());
     builder.Services.AddScoped<IMessagesProducer, RabbitMQProducer>();
-
+   builder.Services.ConfigureMassTransit();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();

@@ -1,6 +1,7 @@
 ﻿using Contracts.Commons.Events;
 using Contracts.Commons.Interfaces;
 using Contracts.Domains.Interfaces;
+using Infrastructure.Extensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Ordering.Domain.Entities;
@@ -13,7 +14,7 @@ namespace Ordering.Infrastructure.Persistence
     {
         private readonly ILogger _logger;
         private List<BaseEvent> _domainEvents;
-
+        private readonly IMediator _mediator;
         private void SetBaseEventsBeforeSaveChanges()
         {
             var domainEntities = ChangeTracker.Entries<IEventEntity>()
@@ -28,9 +29,10 @@ namespace Ordering.Infrastructure.Persistence
             domainEntities.ForEach(x => x.ClearDomainEvent());
         }
 
-        public OrderContext(DbContextOptions<OrderContext> options, ILogger logger) : base(options)
+        public OrderContext(DbContextOptions<OrderContext> options, ILogger logger, IMediator mediator) : base(options)
         {
             _logger = logger;
+            _mediator = mediator;
         }
 
         public DbSet<Order> Orders { get; set; }
@@ -74,7 +76,7 @@ namespace Ordering.Infrastructure.Persistence
             }
             var result = await base.SaveChangesAsync(cancellationToken);
 
-           // await _mediator.DispatchDomainEventAsync(_domainEvents, _logger);
+            await _mediator.DispatchDomainEventAsync(_domainEvents, _logger);
 
             return result;
         }

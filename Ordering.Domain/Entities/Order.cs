@@ -1,4 +1,5 @@
 ﻿using Contracts.Commons.Events;
+using Ordering.Domain.OrderAggregate.Events;
 using Shared.Enums.Order;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -30,23 +31,23 @@ namespace Ordering.Domain.Entities
         public string EmailAddress { get; set; }
 
         [Column(TypeName = "nvarchar(max)")]
-        public string ShippingAddress { get; set; }
+        public string? ShippingAddress { get; set; }
 
         [Column(TypeName = "nvarchar(max)")]
-        public string InvoiceAddress { get; set; }
+        public string? InvoiceAddress { get; set; }
 
-        public EOrderStatus Status { get; set; }
+        public EOrderStatus Status { get; set; } = EOrderStatus.New;
 
-        //public Order AddedOrder()
-        //{
-        //    AddDomainEvent(new OrderCreatedEvent(Id, Username, DocumentNo.ToString(), EmailAddress, TotalPrice, ShippingAddress, InvoiceAddress));
-        //    return this;
-        //}
+        public Order AddedOrder()
+        {
+            AddDomainEvent(new OrderCreatedEvent(Id, Username, DocumentNo.ToString(), EmailAddress, TotalPrice, ShippingAddress, InvoiceAddress));
+            return this;
+        }
 
-        //public Order DeletedOrder()
-        //{
-        //    AddDomainEvent(new OrderDeletedEvent(Id));
-        //    return this;
-        //}
+        public Order DeletedOrder()
+        {
+            AddDomainEvent(new OrderDeletedEvent(Id));
+            return this;
+        }
     }
 }

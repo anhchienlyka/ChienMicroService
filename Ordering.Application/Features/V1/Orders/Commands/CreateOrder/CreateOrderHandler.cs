@@ -1,17 +1,11 @@
-﻿using AutoMapper.Internal;
-using AutoMapper;
+﻿using AutoMapper;
+using Contracts.Services;
 using MediatR;
+using Ordering.Application.Common.Interfaces;
 using Ordering.Application.Common.Models;
 using Ordering.Domain.Entities;
-using Shared.SeedWord;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Serilog;
-using Ordering.Application.Common.Interfaces;
-using Contracts.Services;
+using Shared.SeedWord;
 using Shared.Services.Email;
 
 namespace Ordering.Application.Features.V1.Orders.Commands.CreateOrder
@@ -23,6 +17,7 @@ namespace Ordering.Application.Features.V1.Orders.Commands.CreateOrder
         private readonly ILogger _logger;
         private const string MethodName = "CreateOrderHandler";
         private readonly ISmtpEmailService _emailService;
+
         public CreateOrderHandler(IMapper mapper,
                                   IOrderRepository repository,
                                   ILogger logger,
@@ -41,7 +36,7 @@ namespace Ordering.Application.Features.V1.Orders.Commands.CreateOrder
             var order = _mapper.Map<Order>(request);
             await _repository.CreateOrder(order);
 
-            //order.AddedOrder();
+            order.AddedOrder();
 
             await _repository.SaveChangesAsync();
 
@@ -51,6 +46,7 @@ namespace Ordering.Application.Features.V1.Orders.Commands.CreateOrder
             return new ApiSuccessResult<OrderDto>(
                 _mapper.Map<OrderDto>(order));
         }
+
         private async Task SendMailAsync(Order order, CancellationToken cancellationToken)
         {
             var emailRequest = new MailRequest
@@ -64,7 +60,6 @@ namespace Ordering.Application.Features.V1.Orders.Commands.CreateOrder
             {
                 await _emailService.SendEmailAsync(emailRequest, cancellationToken);
                 _logger.Information($"Sent created order to email {order.EmailAddress}");
-
             }
             catch (Exception ex)
             {

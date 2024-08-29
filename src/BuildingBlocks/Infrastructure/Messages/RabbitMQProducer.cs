@@ -23,7 +23,7 @@ namespace Infrastructure.Messages
             var connection = connectionFactory.CreateConnection();
             using var channel = connection.CreateModel();
 
-            channel.QueueDeclare("order", exclusive: false);
+            channel.QueueDeclare("orders", exclusive: false);
 
             var jsonData = _serializeService.Serialize<T>(message);
 

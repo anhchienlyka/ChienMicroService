@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Ordering.Domain\Ordering.Domain.csproj" />
+    <ProjectReference Include="..\src\BuildingBlocks\EventBus.Messages\EventBus.Messages.csproj" />
     <ProjectReference Include="..\src\BuildingBlocks\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 

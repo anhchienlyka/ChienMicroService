@@ -19,6 +19,9 @@ try
     builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
 
+    //config Masstransit
+    builder.Services.ConfigureMassTransit();
+
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();

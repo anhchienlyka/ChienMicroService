@@ -30,9 +30,8 @@ namespace Ordering.Application.Features.V1.Orders.Commands.UpdateOrder
 
         public async Task<ApiResult<OrderDto>> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
         {
-            var orderEntity = await _repository.GetByIdAsync(request.Id);
-            if (orderEntity is null)
-                throw new NotFoundException(nameof(Order), request.Id);
+            var orderEntity = await _repository.GetByIdAsync(request.Id) ?? throw new NotFoundException(nameof(Order), request.Id);
+
             _logger.Information($"BEGIN: {MethodName}");
 
             //var order = _mapper.Map<Order>(request);

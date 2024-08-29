@@ -65,7 +65,7 @@ namespace Basket.API.Extensions
 
             var mqConnection = new Uri(settings.HostAddress);
             //tu dong chuyen doi
-            //BasketCheckoutEventQueue => basket-checkout-event-queue
+            //BasketCheckoutEventQueue => basket - checkout -event-queue
             services.TryAddSingleton(KebabCaseEndpointNameFormatter.Instance);
             services.AddMassTransit(config =>
             {
