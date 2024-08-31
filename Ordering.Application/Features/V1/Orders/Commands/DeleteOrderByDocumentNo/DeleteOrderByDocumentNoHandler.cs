@@ -32,7 +32,7 @@ namespace Ordering.Application.Features.V1.Orders.Commands.DeleteOrderByDocument
             if (order == null) throw new NotFoundException(nameof(order), request.DocumentNo);
             _repository.Delete(order);
 
-            //order.DeletedOrder();
+            order.DeletedOrder();
 
             await _repository.SaveChangesAsync();
 

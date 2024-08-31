@@ -40,7 +40,7 @@ namespace Ordering.Application.Features.V1.Orders.Commands.CreateOrder
 
             await _repository.SaveChangesAsync();
 
-            await SendMailAsync(order, cancellationToken);
+       //     await SendMailAsync(order, cancellationToken);
             _logger.Information($"END: {MethodName}");
 
             return new ApiSuccessResult<OrderDto>(
