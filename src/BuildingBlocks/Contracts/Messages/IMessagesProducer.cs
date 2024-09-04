@@ -1,4 +1,5 @@
-﻿namespace Contracts.Messages
+﻿
+namespace Contracts.Messages
 {
     public interface IMessagesProducer
     {

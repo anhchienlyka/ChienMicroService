@@ -1,7 +1,6 @@
-﻿namespace Shared.DTOs.Product
-{
-    public class UpdateProductDto : CreateOrUpdateProductDto
-    {
+﻿namespace Shared.Dtos.Product;
 
-    }
+public class UpdateProductDto : CreateOrUpdateProductDto
+{
+   
 }

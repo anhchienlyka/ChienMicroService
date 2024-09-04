@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Shared.DTOs.Product
+namespace Shared.Dtos.Product;
+
+public class CreateProductDto : CreateOrUpdateProductDto
 {
-    public class CreateProductDto : CreateOrUpdateProductDto
-    {
-        [Required]
-        public string No { get; set; }
-        [Required]
-        public string Summanry { get; set; } 
-    }
+    [Required]
+    public string No { get; set; }
 }

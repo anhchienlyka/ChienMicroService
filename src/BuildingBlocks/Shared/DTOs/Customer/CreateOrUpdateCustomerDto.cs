@@ -1,4 +1,6 @@
-﻿namespace Shared.Dtos.Customer;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Shared.Dtos.Customer;
 
 public abstract class CreateOrUpdateCustomerDto
 {

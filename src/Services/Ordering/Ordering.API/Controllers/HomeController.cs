@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Ordering.API.Controllers
+namespace Ordering.API.Controllers;
+
+public class HomeController : ControllerBase
 {
-    public class HomeController : Controller
+    // GET
+    public IActionResult Index()
     {
-        // GET
-        public IActionResult Index()
-        {
-            return Redirect("/swagger/index.html");
-        }
+        return Redirect("/swagger/index.html");
     }
 }

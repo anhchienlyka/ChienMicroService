@@ -1,7 +1,6 @@
 ﻿using Shared.Enums.Inventory;
 
 namespace Shared.Dtos.Inventory;
-
 public class SaleItemDto
 {
     public string ItemNo { get; set; }

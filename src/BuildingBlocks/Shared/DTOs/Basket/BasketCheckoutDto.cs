@@ -1,5 +1,10 @@
-﻿namespace Shared.Dtos.Basket;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
+namespace Shared.Dtos.Basket;
 public class BasketCheckoutDto
 {
     public string Username { get; set; }

@@ -1,10 +1,13 @@
-﻿using Infrastructure.Configuarations;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Shared.Configurations;
+﻿using EventBus.Messages.IntegrationEvents.Events;
+using Infrastructure.Configurations;
 using Infrastructure.Extensions;
 using MassTransit;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Ordering.API.Application.IntegrationEvents.EventsHandler;
+using Ordering.Application.Features.V1.Orders;
+using Shared.Configurations;
+
 namespace Ordering.API.Extensions
 {
     public static class ServiceExtensions
@@ -31,20 +34,26 @@ namespace Ordering.API.Extensions
 
             var mqConnection = new Uri(settings.HostAddress);
             services.TryAddSingleton(KebabCaseEndpointNameFormatter.Instance);
+            services.AddMediator(cfg =>
+            {
+                cfg.AddConsumer<BasketCheckoutEventHandler>();
+            });
             services.AddMassTransit(config =>
             {
                 //add consume
-                config.AddConsumersFromNamespaceContaining<BasketCheckoutEventHandler>();
+                config.AddConsumersFromNamespaceContaining<BasketCheckoutEventHandler    >();
                 config.UsingRabbitMq((ctx, cfg) =>
                 {
                     cfg.Host(mqConnection);
-                    cfg.ReceiveEndpoint("basket-checkout-queue", c =>
-                    {
-                        c.ConfigureConsumer<BasketCheckoutEventHandler>(ctx);
-                    });
+                    //cfg.ReceiveEndpoint("basket-checkout-queue", c =>
+                    //{
+                    //    c.ConfigureConsumer<BasketCheckoutEventHandler>(ctx);
+                    //});
 
-                    //co the viet theo receive nhu tren, hoac viet nhu sau de bat ki thang nao co trien khai IConsumer se deu trien khai
-                    //  cfg.ConfigureEndpoints(ctx);
+                    //co the viet theo receive nhu tren,
+                    //hoac viet nhu sau de bat ki thang nao
+                    //co trien khai IConsumer se deu trien khai
+                    cfg.ConfigureEndpoints(ctx);
                 });
             });
         }

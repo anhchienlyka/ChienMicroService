@@ -1,9 +1,15 @@
-﻿using Contracts.Services;
-using Infrastructure.Configuarations;
-using MailKit.Net.Smtp;
-using MimeKit;
+﻿using Contracts.Configurations;
+using Contracts.Services;
 using Serilog;
 using Shared.Services.Email;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using MailKit.Net.Smtp;
+using MimeKit;
+using Infrastructure.Configurations;
 
 namespace Infrastructure.Services
 {
@@ -13,11 +19,12 @@ namespace Infrastructure.Services
         private readonly EmailSMTPSettings _settings;
         private readonly SmtpClient _smtpClient;
 
-        public SmtpEmailService(ILogger logger, EmailSMTPSettings settings)
+        public SmtpEmailService(ILogger logger,
+            EmailSMTPSettings settings)
         {
-            _logger = logger;
-            _settings = settings;
-            _smtpClient = new SmtpClient();
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
+            _smtpClient = new SmtpClient(); // thư viện MailKit
         }
 
         public void SendEmail(MailRequest request)
@@ -64,14 +71,11 @@ namespace Infrastructure.Services
             }
         }
 
-
-
         private MimeMessage GetMimeMessage(MailRequest request)
         {
-            var emailMessage = new MimeMessage
+            var emailMessage = new MimeMessage // thư viện MailKit
             {
-                
-                Sender = new MailboxAddress("_settings.DisplayName", request.From ?? "iammun29102000@gmail.com"),
+                Sender = new MailboxAddress("_settings.DisplayName", request.From ?? "anhchienlyk1@gmail.com"),
                 Subject = request.Subject,
                 Body = new BodyBuilder
                 {
@@ -91,7 +95,8 @@ namespace Infrastructure.Services
                 var toAddress = request.ToAddress;
                 emailMessage.To.Add(MailboxAddress.Parse(toAddress));
             }
-            emailMessage.From.Add(MailboxAddress.Parse(request.From ?? "anhchienlyk4@gmail.com"));
+
+            emailMessage.From.Add(MailboxAddress.Parse(request.From ?? "iammun29102000@gmail.com"));
             return emailMessage;
         }
     }

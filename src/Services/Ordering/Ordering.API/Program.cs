@@ -1,36 +1,51 @@
 using Common.Logging;
-using Contracts.Commons.Interfaces;
+using Contracts.Common.Interfaces;
 using Contracts.Messages;
-using Infrastructure.Commons;
+using Contracts.Services;
+using HealthChecks.UI.Client;
+using Infrastructure.Common;
+using Infrastructure.Configurations;
 using Infrastructure.Messages;
+using Infrastructure.Services;
+using MediatR;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Ordering.API.Extensions;
 using Ordering.Application;
 using Ordering.Infrastructure;
 using Ordering.Infrastructure.Persistence;
 using Serilog;
+using System;
 using System.Diagnostics;
 
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Host.UseSerilog(Serilogger.Configure);
+Log.Information($"Start {builder.Environment.ApplicationName} Api up");
 
-Log.Information("Starting Ordering API up");
+// Add services to the container.
 
 try
 {
-    // Add services to the container.
-
-    builder.Services.AddConfigurationSettings(builder.Configuration);
-    builder.Services.AddApplicationServices();
-    builder.Services.AddInfrastructureServices(builder.Configuration);
+    builder.Host.AddAppConfigurations();
+    
+    builder.Host.UseSerilog(Serilogger.Configure);
     builder.Services.AddControllers();
     builder.Services.AddScoped<ISerializeService, SerializeService>();
     builder.Services.AddSingleton<Stopwatch>(new Stopwatch());
     builder.Services.AddScoped<IMessagesProducer, RabbitMQProducer>();
-   builder.Services.ConfigureMassTransit();
+    builder.Services.AddScoped<ISmtpEmailService, SmtpEmailService>();
+
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+    builder.Services.AddApplicationServices();
+    builder.Services.AddConfigurationSettings(builder.Configuration);
+    builder.Services.AddInfrastructureServices(builder.Configuration);
+    builder.Services.ConfigureHealthChecks(builder.Configuration);
+    builder.Services.ConfigureMassTransit();
+
 
     var app = builder.Build();
 
@@ -41,30 +56,38 @@ try
         app.UseSwaggerUI();
     }
     //seeding data
-    using (var scope = app.Services.CreateScope())
-    {
-        var orderContextSeed = scope.ServiceProvider.GetRequiredService<OrderContextSeed>();
-        await orderContextSeed.InitializeAsync();
-        await orderContextSeed.TrySeedAsync();
-    }
-    app.UseHttpsRedirection();
+    //using(var scope = app.Services.CreateScope())
+    //{
+    //    var orderContextSeed = scope.ServiceProvider.GetRequiredService<OrderContextSeed>();
+    //    await orderContextSeed.InitializeAsync();
+    //    await orderContextSeed.TrySeedAsync();
+    //}
+    app.UseRouting();
+    //app.UseHttpsRedirection();
 
     app.UseAuthorization();
 
-    app.MapControllers();
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+        {
+            Predicate = _ => true,
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        });
+        endpoints.MapDefaultControllerRoute();
+    });
 
     app.Run();
 }
 catch (Exception ex)
 {
-    Log.Information($"Error Ordering API :{ex.Message}");
     string type = ex.GetType().Name;
-    if (type.Equals("StopTheHostException", StringComparison.Ordinal))
+    if(type.Equals("StopTheHostException", StringComparison.Ordinal))
         throw;
     Log.Fatal(ex, "Unhanded exception");
 }
 finally
 {
-    Log.Information("Shut down Ordering API complete");
+    Log.Information($"Shut down {builder.Environment.ApplicationName} API complete");
     Log.CloseAndFlush();
 }

@@ -1,12 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Shared.SeedWord
 {
     public class PageList<T> : List<T>
     {
         private MetaData _metaData { get; }
-
         public PageList(IEnumerable<T> items, long totalItems, int pageNumber, int pageSize)
         {
             _metaData = new MetaData
